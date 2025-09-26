@@ -2,8 +2,8 @@
 
 ## 功能说明
 - 目前通过spring boot + Springdoc + mybatis 实现了一个简单的增删改查操作示例
-- 部署体验地址[http://114.132.58.71:9999/swagger-ui/index.html]
-- hello 部分的数据操作为后端是用map实现的一个简单内在数据块。服务重启内容丢失
+- [部署体验地址](http://114.132.58.71:9999/swagger-ui/index.html)
+- hello 部分的数据操作，后端是一个用map实现的简单内存数据块。服务重启内容丢失
 - user 部分为针对一个定义了 id, username, email, passord等字段的一张简单的数据表的相关操作
 - 代码后台数据库为腾讯云上mysql,目前为方便调试，采用外网地址连接，现实不应该这样！！！
 
