@@ -17,7 +17,7 @@ public interface UserMapper {
     @Select("select * from user where id=#{id}")
     User getById(@Param("id") Integer id);
 
-    @Select("select * from uesr")
+    @Select("select * from user")
     List<User> getAll();
 
     @Insert("INSERT INTO user (username, email,password) VALUES(#{username},#{email},#{password})")

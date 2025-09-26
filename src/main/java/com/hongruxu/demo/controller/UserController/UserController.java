@@ -1,5 +1,8 @@
 package com.hongruxu.demo.controller.UserController;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import com.hongruxu.demo.entity.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @Tag(name = "user", description = "一个简单的数据库读写操作")
@@ -36,6 +41,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users")
+    public List<User> getUser() {
+        return userMapper.getAll();
+    }
+
     @PostMapping("/user")
     public int addUser(@RequestBody User entity) {
         return userMapper.insert(entity);
@@ -48,6 +58,15 @@ public class UserController {
 
         }catch(Exception e){
             return -1; 
+        }
+    }
+    @PutMapping("user/{id}")
+    public int putUser(@PathVariable String id, @RequestBody User entity) {
+        try{
+            entity.setId(Integer.parseInt(id));
+            return  userMapper.update(entity);
+        }catch(Exception e){
+            return -1;
         }
     }
     

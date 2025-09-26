@@ -6,8 +6,8 @@ spring:
     datasource:
         # 此处为调试方便，直接将mysql开通了外网并通过外网连接，真实场景是需要通过内网连接的！！！ TODO
         url: jdbc:mysql://gz-cdb-97gj1jgv.sql.tencentcdb.com:24122/mic_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-        username: michael
-        password: micMIC123$$
+        username: mic
+        password: micMIC123$$$
         driver-class-name: com.mysql.cj.jdbc.Driver
 # 启动端口
 server:
