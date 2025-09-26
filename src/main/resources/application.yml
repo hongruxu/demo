@@ -1,0 +1,18 @@
+spring:
+    application:
+        name: demo
+
+    # 数据库相关配置
+    datasource:
+        url: jdbc:mysql://gz-cdb-97gj1jgv.sql.tencentcdb.com:24122/mic_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+        username: michael
+        password: micMIC123$$
+        driver-class-name: com.mysql.cj.jdbc.Driver
+# openapi 相关配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+  packages-to-scan: com.hongruxu.demo.controller
