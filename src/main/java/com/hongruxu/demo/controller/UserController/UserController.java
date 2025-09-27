@@ -28,14 +28,8 @@ public class UserController {
     private UserMapper userMapper;
 
     @GetMapping("/user/{id}")
-    public User getUser(@PathVariable String id) {
-        try{
-            User user = userMapper.getById(Integer.parseInt(id));
-            return user;
-
-        }catch(Exception e){
-            return new User(); 
-        }
+    public User getUser(@PathVariable Integer id) {
+        return userMapper.getById(id);
     }
 
     @GetMapping("/users")
@@ -49,22 +43,12 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    public int delUser(@PathVariable String id) {
-        try{
-            return userMapper.deleteById(Integer.parseInt(id));
-
-        }catch(Exception e){
-            return -1; 
-        }
+    public int delUser(@PathVariable Integer id) {
+        return userMapper.deleteById(id);
     }
     @PutMapping("user/{id}")
-    public int putUser(@PathVariable String id, @RequestBody User entity) {
-        try{
-            entity.setId(Integer.parseInt(id));
-            return  userMapper.update(entity);
-        }catch(Exception e){
-            return -1;
-        }
+    public int putUser(@PathVariable Integer id, @RequestBody User entity) {
+        entity.setId(id);
+        return  userMapper.update(entity);
     }
-    
 }

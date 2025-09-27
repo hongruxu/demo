@@ -33,15 +33,15 @@ public class AccountController {
 
     // 查询指定账户信息，
     @GetMapping("/account/{id}")
-    public Account getAccount(@RequestParam String id) {
-        return accountMapper.getById(Integer.parseInt(id));
+    public Account getAccount(@RequestParam Integer id) {
+        return accountMapper.getById(id);
 
     }
     // 查询指定账户交易记录
     // TODO:没有考虑分页问题,也没考虑按时间筛选
     @GetMapping("/transfer/{id}")
-    public List<TransferFlow> getTransfer(@RequestParam String param) {
-        return transferFlowMapper.getByFromAccount(Integer.parseInt(param));
+    public List<TransferFlow> getTransfer(@RequestParam Integer id) {
+        return transferFlowMapper.getByFromAccount(id);
     }
 
     // 转账操作

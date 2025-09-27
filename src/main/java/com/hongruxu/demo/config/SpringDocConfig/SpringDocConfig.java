@@ -1,5 +1,6 @@
 package com.hongruxu.demo.config.SpringDocConfig;
 
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,4 +23,27 @@ public class SpringDocConfig {
                                 .email("michaelxu365@@gmail.com")));
     }
  
+    // 分组定义
+    @Bean
+    public GroupedOpenApi helloApi(){
+        return GroupedOpenApi.builder()
+        .group("hello")
+        .pathsToMatch("/hello/**")
+        .build();
+    }
+    @Bean
+    public GroupedOpenApi userApi(){
+        return GroupedOpenApi.builder()
+        .group("user")
+        .pathsToMatch("/user/**")
+        .build();
+    }
+    @Bean
+    public GroupedOpenApi accountAPI(){
+        return GroupedOpenApi.builder()
+        .group("account")
+        .pathsToMatch("/account/**", "/transfer/**")
+        .build();
+    }
+
 }
