@@ -27,7 +27,7 @@ public class Persist {
         return instance;
     }
     
-    // 把数据写入内在
+    // 把数据写入内存
     public String put(String key, String value) {
         return mapStorage.put(key, value);
     }
