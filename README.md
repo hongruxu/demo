@@ -11,19 +11,29 @@
 - 示例代码逻辑轻，没有单独做service层
 - 异常处理未做标准化处理，后续待完善
 
+## 部署方法
+- Docke暂时环境，采用机器部署的方式，前提条件需要建好数据库表和一台装有JDK的机器
+- 修改代码对应的数据库连接配置
+- 修改copy_to_test.sh脚本中的机器IP
+- 执行copy_to_test.sh，中间会需要交互输出密码，如在机器装上ssh key，可免密部署
+
+## 说明
+- 本代码只为演示基本功能，未考虑安全和一些运营标准。
+- 配置中的数据库密码等名文提交也是不符合运营标准的，需要有另外的方法或是相应的平台管理密码
 
 ## 数据库定义
+
 ### account 表
-`
+```sql
 CREATE TABLE `account` (
   `accountid` int NOT NULL AUTO_INCREMENT,
   `balance` bigint NOT NULL DEFAULT '0',
   `updatetime` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`accountid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
-`
+
 ### transfer_flow 表
-`
+```sql
 CREATE TABLE `transfer_flow` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `fromaccount` int NOT NULL DEFAULT '0',
@@ -35,9 +45,9 @@ CREATE TABLE `transfer_flow` (
   PRIMARY KEY (`id`),
   KEY `fromaccount` (`fromaccount`,`toaccount`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
-`
+
 ## user 表
-`
+```sql
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
@@ -47,7 +57,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
-`
+
 ## change log 2025-09-26
 - 通过 spring boot创建项目
 - 引入 springdoc 生成openapi文档
@@ -61,5 +71,4 @@ CREATE TABLE `user` (
 - 为了方便部署，写了一个脚本简单用scp部署到机器验证，出于安全考虑，脚本是交互式的，需要手工输入密码
 - 文档按 hello/ user/ account功能进行了分组展示
 - id做了限定必须为数字
-- 有空尝试验证采用skywalking做一个简单监控
-
+- 完善了一些转账逻辑
