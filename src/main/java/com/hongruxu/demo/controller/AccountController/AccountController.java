@@ -33,15 +33,27 @@ public class AccountController {
 
     @Tag(name = "get account", description = "查询指定账户信息")
     @GetMapping("/account/{id}")
-    public Account getAccount(@PathVariable Integer id) {
+    public Account getAccount(@PathVariable("id") Integer id) {
         return accountMapper.getById(id);
     }
 
     // 没有考虑分页问题,也没考虑按时间筛选
-    @Tag(name = "get transfer", description = "查询指定账户交易记录")
+    @Tag(name = "get transfer", description = "查询指定账户转出交易记录")
+    @GetMapping("/transfer/from/{id}")
+    public List<TransferFlow> getTransferFrom(@PathVariable("id") Integer id) {
+        return transferFlowMapper.getTransByFromAccount(id);
+    }
+
+    @Tag(name = "get transfer to ", description = "查询指定账户转入交易记录")
+    @GetMapping("/transfer/to/{id}")
+    public List<TransferFlow> getTransferTo(@PathVariable("id") Integer id) {
+        return transferFlowMapper.getTransByToAccount(id);
+    }
+
+    @Tag(name = "get transfer  ", description = "查询指定账户转入转出交易记录")
     @GetMapping("/transfer/{id}")
-    public List<TransferFlow> getTransfer(@PathVariable Integer id) {
-        return transferFlowMapper.getByFromAccount(id);
+    public List<TransferFlow> getTransfer(@PathVariable("id") Integer id) {
+        return transferFlowMapper.getTransByAccount(id);
     }
 
     // 事务和安全未考虑全面，只是简单的实现了逻辑，也没有实现 B账户逻辑
@@ -72,7 +84,14 @@ public class AccountController {
         // 这里逻辑应该做进一步的封装的，这里就简单示例一下了
         fromAccount.setBalance(fromAccount.getBalance()-trans.getAmount());
         toAccount.setBalance(toAccount.getBalance()+trans.getAmount());
-        transferFlowMapper.insert(trans.getFromAccount(),trans.getToAccount(),trans.getAmount(),fromAccount.getBalance(),toAccount.getBalance());
+        TransferFlow transFlow = new TransferFlow();
+        transFlow.setFromAccount(fromAccount.getAccountId());
+        transFlow.setToAccount(toAccount.getAccountId());
+        transFlow.setFromBalance(fromAccount.getBalance());
+        transFlow.setToBalance(toAccount.getBalance());
+        transFlow.setAmount(trans.getAmount());
+
+        transferFlowMapper.insert(transFlow);
         accountMapper.update(fromAccount);
         // 简单的模拟一下事务异常逻辑，假设转账金额为99，则抛个异常，验证是事务rollback
         if(trans.getAmount() == 99){
@@ -84,12 +103,13 @@ public class AccountController {
 
     @Tag(name = "create account", description = "新增一个账号")
     @PostMapping("/account")
-    public String createAccount(@RequestBody Account account) {
-        int res = accountMapper.insert(account);
-        if(res == 1){
-            return "创建用户成功";
+    public Account createAccount(@RequestBody Account account) {
+        int ret = accountMapper.insert(account);
+        if(ret == 1) {
+            return account;
         }
-        return "创建用户失败";
+        return null;
+  
     }
     
 }

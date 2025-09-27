@@ -1,5 +1,7 @@
 package com.hongruxu.demo.controller.HelloController;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.hongruxu.demo.persist.Persist;
+
 
 
 @RestController
@@ -35,6 +38,13 @@ public class HelloController {
     @DeleteMapping("/hello/{key}")
     public String del(@PathVariable String key){
         return Persist.getInstance().del(key);
+
+    }
+
+    // 查出所有key
+    @GetMapping("/hello")
+    public Map<String, String> getAllValue() {
+        return Persist.getInstance().getAll();
 
     }
 

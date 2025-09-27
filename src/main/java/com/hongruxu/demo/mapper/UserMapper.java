@@ -2,30 +2,31 @@ package com.hongruxu.demo.mapper;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import com.hongruxu.demo.entity.User;
 import java.util.List;
 
 
-@Mapper
 public interface UserMapper {
 
-    @Select("select * from user where id=#{id}")
+    @Select("SELECT * FROM user WHERE id=#{id}")
     User getById(@Param("id") Integer id);
 
-    @Select("select * from user")
+    @Select("SELECT * FROM user")
     List<User> getAll();
 
-    @Insert("INSERT INTO user (username, email,password) VALUES(#{username},#{email},#{password})")
-    int insert(User user);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("INSERT INTO user (user_name, email, age) VALUES(#{user.userName},#{user.email},#{user.age})")
+    int insert(@Param("user") User user);
 
-    @Update("UPDATE user SET username=#{username}, email=#{email}, password=#{password} WHERE id=#{id}")
-    int update(User user);
+    @Update("UPDATE user SET user_name=#{user.userName}, email=#{user.email}, age=#{user.age} WHERE id=#{user.id}")
+    int update(@Param("user") User user);
 
     @Delete("DELETE FROM user WHERE id=#{id}")
-    int deleteById(Integer id);
+    int deleteById(@Param("id") Integer id);
 } 

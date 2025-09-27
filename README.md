@@ -28,11 +28,11 @@
 ### account 表
 ```sql
 CREATE TABLE `account` (
-  `accountid` int NOT NULL AUTO_INCREMENT,
+  `account_id` int NOT NULL AUTO_INCREMENT,
   `balance` bigint NOT NULL DEFAULT '0',
-  `updatetime` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`accountid`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci 
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4  
 -- 为了让产生的账号长一些这里自增从10000开始
 ```
 
@@ -40,28 +40,28 @@ CREATE TABLE `account` (
 ```sql
 CREATE TABLE `transfer_flow` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `fromaccount` int NOT NULL DEFAULT '0',
-  `toaccount` int NOT NULL DEFAULT '0',
+  `from_account` int NOT NULL DEFAULT '0',
+  `to_account` int NOT NULL DEFAULT '0',
   `amount` int NOT NULL DEFAULT '0',
-  `frombalance` int NOT NULL DEFAULT '0',
-  `tobalance` int NOT NULL DEFAULT '0',
-  `optime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `from_balance` int NOT NULL DEFAULT '0',
+  `to_balance` int NOT NULL DEFAULT '0',
+  `op_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `fromaccount` (`fromaccount`,`toaccount`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+  KEY `from_to_account` (`from_account`,`to_account`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4
 ```
 
 ## user 表
 ```sql
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_name` varchar(50) NOT NULL DEFAULT '',
+  `age` int NOT NULL DEFAULT 0,
+  `email` varchar(100) NOT NULL DEFAULT '',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 
 ```
 
 ## change log 2025-09-26
@@ -78,3 +78,39 @@ CREATE TABLE `user` (
 - 文档按 hello/ user/ account功能进行了分组展示
 - id做了限定必须为数字
 - 完善了一些转账逻辑
+- 优化了Mapper注解的写法，调整了一些业务逻辑
+- 解决了通过lombok注解在发布包中无法使用的问题
+
+
+## 问题解决
+1. lombok 无法正常使用，需要在pom.xml中对build部分进行设置,正确设置如下，如果通过spring boot 工具自动生成，是没有maven这一节的，也没有关于lombok的相关配置
+```xml
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+```

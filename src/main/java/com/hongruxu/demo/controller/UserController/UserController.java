@@ -40,8 +40,12 @@ public class UserController {
 
     @Tag(name = "create user", description = "创建一个用户")
     @PostMapping("/user")
-    public int addUser(@RequestBody User entity) {
-        return userMapper.insert(entity);
+    public User addUser(@RequestBody User user) {
+        int ret =  userMapper.insert(user);
+        if(ret == 1){
+            return user;
+        }
+        return null;
     }
 
     @Tag(name = "del user", description = "删除一个用户")
@@ -52,8 +56,12 @@ public class UserController {
 
     @Tag(name = "update user", description = "修改一个用户")
     @PutMapping("user/{id}")
-    public int putUser(@PathVariable Integer id, @RequestBody User entity) {
-        entity.setId(id);
-        return  userMapper.update(entity);
+    public User putUser(@PathVariable Integer id, @RequestBody User user) {
+        user.setId(id);
+        int ret = userMapper.update(user);
+        if(ret == 1){
+            return user;
+        }
+        return null;
     }
 }

@@ -41,5 +41,9 @@ public class Persist {
     public String del(String key){
         return mapStorage.remove(key);
     }
+    // 查出所有内容
+    public Map<String, String>getAll(){
+        return mapStorage;
+    }
 
 }
