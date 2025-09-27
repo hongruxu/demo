@@ -16,13 +16,13 @@ import com.hongruxu.demo.persist.Persist;
 
 @RestController
 @Tag(name = "hello", description = "一个简单的RESTful接口组示例，分别展示了读取数据，写入数据，删除数据操作，数据通过内存map模拟存储。")
+@ApiResponse(responseCode = "200", description = "成功")
 @Controller
 public class HelloController {
 
     // 写入一个key value
     @PostMapping("/hello/{key}")
-    @ApiResponse(responseCode = "200", description = "成功")
-    public String post(@PathVariable String key ,@RequestBody String entity) {
+    public String addOrUpdate(@PathVariable String key ,@RequestBody String entity) {
         return Persist.getInstance().put(key, entity);
     }
 

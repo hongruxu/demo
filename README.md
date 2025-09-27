@@ -11,6 +11,40 @@
 - 示例代码逻辑轻，没有单独做service层
 - 异常处理未做标准化处理，后续待完善
 
+
+## 数据库定义
+### account 表
+CREATE TABLE `account` (
+  `accountid` int NOT NULL AUTO_INCREMENT,
+  `balance` bigint NOT NULL DEFAULT '0',
+  `updatetime` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`accountid`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+### transfer_flow 表
+CREATE TABLE `transfer_flow` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `fromaccount` int NOT NULL DEFAULT '0',
+  `toaccount` int NOT NULL DEFAULT '0',
+  `amount` int NOT NULL DEFAULT '0',
+  `frombalance` int NOT NULL DEFAULT '0',
+  `tobalance` int NOT NULL DEFAULT '0',
+  `optime` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fromaccount` (`fromaccount`,`toaccount`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+## user 表
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
 ## change log 2025-09-26
 - 通过 spring boot创建项目
 - 引入 springdoc 生成openapi文档

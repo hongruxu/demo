@@ -19,7 +19,6 @@ import com.hongruxu.demo.mapper.UserMapper;
 import com.hongruxu.demo.entity.User;
 
 @RestController
-@Tag(name = "user", description = "一个简单的数据库读写操作")
 @ApiResponse(responseCode = "200", description = "成功")
 @Controller
 public class UserController {
@@ -27,25 +26,31 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
+    @Tag(name = "get user", description = "获取用户信息")
     @GetMapping("/user/{id}")
     public User getUser(@PathVariable Integer id) {
         return userMapper.getById(id);
     }
 
-    @GetMapping("/users")
+    @Tag(name = "get all user", description = "获取全量用户信息")
+    @GetMapping("/user")
     public List<User> getUser() {
         return userMapper.getAll();
     }
 
+    @Tag(name = "create user", description = "创建一个用户")
     @PostMapping("/user")
     public int addUser(@RequestBody User entity) {
         return userMapper.insert(entity);
     }
 
+    @Tag(name = "del user", description = "删除一个用户")
     @DeleteMapping("/user/{id}")
     public int delUser(@PathVariable Integer id) {
         return userMapper.deleteById(id);
     }
+
+    @Tag(name = "update user", description = "修改一个用户")
     @PutMapping("user/{id}")
     public int putUser(@PathVariable Integer id, @RequestBody User entity) {
         entity.setId(id);

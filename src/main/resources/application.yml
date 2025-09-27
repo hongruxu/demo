@@ -3,7 +3,7 @@ spring:
         name: demo
     # 数据库相关配置
     datasource:
-        # 此处为调试方便，直接将mysql开通了外网并通过外网连接，真实场景是需要通过内网连接的！！！ TODO
+        # 目前手头的机器和数据库不在同一区域，不太好通过内网访问，暂用外网方式连接真实场景是需要通过内网连接的！！！ TODO
         url: jdbc:mysql://gz-cdb-97gj1jgv.sql.tencentcdb.com:24122/mic_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
         username: mic
         password: micMIC123$$$
