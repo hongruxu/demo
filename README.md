@@ -32,7 +32,8 @@ CREATE TABLE `account` (
   `balance` bigint NOT NULL DEFAULT '0',
   `updatetime` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`accountid`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci 
+-- 为了让产生的账号长一些这里自增从10000开始
 ```
 
 ### transfer_flow 表
@@ -47,7 +48,7 @@ CREATE TABLE `transfer_flow` (
   `optime` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fromaccount` (`fromaccount`,`toaccount`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 ```
 
 ## user 表
@@ -60,7 +61,7 @@ CREATE TABLE `user` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 ```
 
 ## change log 2025-09-26
