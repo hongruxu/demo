@@ -25,14 +25,13 @@
 
 
 ## 监控配置相关
-1. 演示用，actuator全开，并配了prometheus [actuator指标相关地址](http://114.132.58.71:9999/actuator)
-2. prometheus [访问地址](http://114.132.58.71:9090/)
-3. grafana 展示 [访问地址](http://114.132.58.71:3000/d/X034JGT7Gz)
+1. 演示用，配了prometheus [actuator指标相关地址](http://114.132.58.71:9999/actuator)
+2. grafana 展示 [访问地址](http://114.132.58.71:3000/d/X034JGT7Gz)
    
 
 ## 数据库定义
 
-### account 表
+### account 账户表，只有账号和余额，为方便账号通过自增生成
 ```sql
 CREATE TABLE `account` (
   `account_id` int NOT NULL AUTO_INCREMENT,
@@ -43,7 +42,7 @@ CREATE TABLE `account` (
 -- 为了让产生的账号长一些这里自增从10000开始
 ```
 
-### transfer_flow 表
+### transfer_flow 转账流水表，记录转账时双方账号，转账金额及转账后各自余额
 ```sql
 CREATE TABLE `transfer_flow` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -58,7 +57,7 @@ CREATE TABLE `transfer_flow` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4
 ```
 
-## user 表
+## user 一个普通的用户资料表，仅演示读写操作
 ```sql
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -71,7 +70,8 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 
 ```
 
-## change log 2025-09-26
+## change log 
+## 2025-09-26
 - 通过 spring boot创建项目
 - 引入 springdoc 生成openapi文档
 - 引入 mybatis 及 mysql 组件，读取远程数据库
@@ -87,7 +87,9 @@ CREATE TABLE `user` (
 - 完善了一些转账逻辑
 - 优化了Mapper注解的写法，调整了一些业务逻辑
 - 解决了通过lombok注解在发布包中无法使用的问题
-- 增加监控
+
+## 2025-09-28
+- 用 promethus+grafana 把服务相关信息监控起来
 
 
 ## 问题解决
