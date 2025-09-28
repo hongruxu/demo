@@ -26,7 +26,7 @@
 
 ## 监控配置相关
 1. 演示用，配了prometheus [actuator指标相关地址](http://114.132.58.71:9999/actuator)
-2. grafana 展示 [访问地址](http://114.132.58.71:3000/d/X034JGT7Gz)
+2. grafana 展示 [访问地址](http://114.132.58.71:3000/d/X034JGT7Gz) 用户名：admin, 密码：micMIC123
    
 
 ## 数据库定义
