@@ -23,7 +23,7 @@ springdoc:
     enabled: true
     path: /api-docs
   swagger-ui:
-    path: /swagger-ui/index.html
+    path: /index.html
   packages-to-scan: com.hongruxu.demo.controller
 
 management:

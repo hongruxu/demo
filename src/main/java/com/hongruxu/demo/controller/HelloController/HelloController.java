@@ -22,30 +22,29 @@ import com.hongruxu.demo.persist.Persist;
 @ApiResponse(responseCode = "200", description = "成功")
 @Controller
 public class HelloController {
-
-    // 写入一个key value
+    
+    @Tag(name = "write value", description = "写入一个key value")
     @PostMapping("/hello/{key}")
     public String addOrUpdate(@PathVariable String key ,@RequestBody String entity) {
         return Persist.getInstance().put(key, entity);
     }
 
-    // 查出一个key 的value
+    @Tag(name = "query value", description = "查出一个key 的value")
     @GetMapping("/hello/{key}")
     public String get(@PathVariable String key) {
         return Persist.getInstance().get(key);
     }
-
+    
+    @Tag(name = "delete value", description = "删除一个key")
     @DeleteMapping("/hello/{key}")
     public String del(@PathVariable String key){
         return Persist.getInstance().del(key);
-
     }
 
-    // 查出所有key
+    @Tag(name = "query all value", description = "查出所有key")
     @GetMapping("/hello")
     public Map<String, String> getAllValue() {
         return Persist.getInstance().getAll();
-
     }
 
 }

@@ -6,7 +6,6 @@ import java.util.Map;
 
 // Persist 一个简单的单例类，用来存储临时数据，用于展示接口读写操作
 public class Persist {
-
     // 用内存Map模拟保存数据,此处简单处理，只为了展示用
     private static Map<String, String> mapStorage = new HashMap<>();
 
@@ -15,7 +14,6 @@ public class Persist {
     // 构造函数 private 化，防止主动产生对像
     private Persist() {}
     
-
     public static Persist getInstance() {
         if (instance == null) { // 第一次检查
             synchronized (Persist.class) {
@@ -45,5 +43,4 @@ public class Persist {
     public Map<String, String>getAll(){
         return mapStorage;
     }
-
 }
