@@ -4,15 +4,16 @@
 - 目前通过spring boot + Springdoc + mybatis 实现了一个简单的增删改查操作示例
 - [部署体验地址](http://114.132.58.71:9999/swagger-ui/index.html)
 - hello 部分的数据操作，后端是一个用map实现的简单内存数据块。服务重启内容丢失
-- user 部分为针对一个定义了 id, username, email, passord等字段的一张简单的数据表的相关操作
+- user 部分为针对一个定义了 id, user_name, email, age等字段的一张简单的数据表的相关操作
 - account 部分是一个简单模拟两个账户互转的逻辑
 
 
 ## 部署方法
-1. Docke暂时没环境，采用机器直接部署的方式，前提条件需要建好数据库表和一台装有JDK的机器
-2. 修改代码对应的数据库连接配置 (resources/application.yml)
-3. 修改copy_to_test.sh脚本中的机器IP
-4. 执行copy_to_test.sh，中间会需要交互输出密码，如在机器装上ssh key，可免密部署
+1. 单机测试验证，Docker反而太重，暂不用，不过Dockerfile已经提供。
+2. 采用机器直接部署的方式，前提条件需要建好数据库表和一台装有JDK的机器
+3. 修改代码对应的数据库连接配置 (resources/application.yml)
+4. 修改copy_to_test.sh脚本中的机器IP，部署目录等
+5. 执行copy_to_test.sh，中间会需要交互输出密码，如在机器装上ssh key，可免密部署
 
 ## 说明
 - 本代码只为演示基本功能，未考虑安全和一些运营标准。

@@ -3,7 +3,6 @@ package com.hongruxu.demo.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-
 @Data
 @Schema(description = "转账结构")
 public class AccountTransfer {
