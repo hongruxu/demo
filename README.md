@@ -90,6 +90,7 @@ CREATE TABLE `user` (
 
 ## 2025-09-28
 - 用 promethus+grafana 把服务相关信息监控起来
+- 做了一个Result类封装返回结构。
 
 
 ## 问题解决

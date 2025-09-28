@@ -15,10 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.hongruxu.demo.persist.Persist;
 
-
+// 一个非常简单的读写操作示例，入参出参都是 String，只展示把流程跑通
 
 @RestController
-@Tag(name = "hello", description = "一个简单的RESTful接口组示例，分别展示了读取数据，写入数据，删除数据操作，数据通过内存map模拟存储。")
 @ApiResponse(responseCode = "200", description = "成功")
 @Controller
 public class HelloController {
@@ -41,7 +40,7 @@ public class HelloController {
         return Persist.getInstance().del(key);
     }
 
-    @Tag(name = "query all value", description = "查出所有key")
+    @Tag(name = "get all value", description = "删除一个key")
     @GetMapping("/hello")
     public Map<String, String> getAllValue() {
         return Persist.getInstance().getAll();

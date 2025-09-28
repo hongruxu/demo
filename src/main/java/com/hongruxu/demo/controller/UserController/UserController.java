@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import com.hongruxu.demo.mapper.UserMapper;
 import com.hongruxu.demo.entity.User;
 
+// 一个简单的读写数据库操作，返回内容以真实结构为主，未考虑异常等情况，主要演示跑通数据库操作
+
 @RestController
 @ApiResponse(responseCode = "200", description = "成功")
 @Controller

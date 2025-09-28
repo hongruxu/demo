@@ -1,13 +1,13 @@
 package com.hongruxu.demo.persist;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 // Persist 一个简单的单例类，用来存储临时数据，用于展示接口读写操作
 public class Persist {
     // 用内存Map模拟保存数据,此处简单处理，只为了展示用
-    private static Map<String, String> mapStorage = new HashMap<>();
+    private static Map<String, String> mapStorage = new ConcurrentHashMap<>();
 
     // 使用 volatile 保证可见性和禁止指令重排序
     private static volatile Persist instance;
