@@ -16,7 +16,7 @@ mybatis:
   configuration:
     # 表中字段名与Bean字段名转换
     map-underscore-to-camel-case: true
-    
+
 # openapi 相关配置
 springdoc:
   api-docs:
@@ -26,3 +26,8 @@ springdoc:
     path: /swagger-ui/index.html
   packages-to-scan: com.hongruxu.demo.controller
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus'
