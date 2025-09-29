@@ -16,6 +16,18 @@ mybatis:
   configuration:
     # 表中字段名与Bean字段名转换
     map-underscore-to-camel-case: true
+    
+
+# pagehelper:
+#   offset-as-page-num: true
+#   reasonable: true
+#   page-size-zero: true
+#   support-methods-arguments: true
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
 
 # openapi 相关配置
 springdoc:
