@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test for hello</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <link rel = "stylesheet" href = "./css/style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header>
+                <h1>Hello 模块用例展示</h1>
+                <p class="subtitle">实现key value的增删改查功能</p>
+            </header>
+            
+            <div class="content">
+                <!-- 操作区域 -->
+                <div>
+                    <div class="card">
+                        <h2>数据操作</h2>
+                        
+                        <div class="tabs">
+                            <div class="tab" :class="{ active: activeTab === 'create' }" @click="activeTab = 'create'">
+                                新增数据
+                            </div>
+                            <div class="tab" :class="{ active: activeTab === 'read' }" @click="activeTab = 'read'">
+                                查询数据
+                            </div>
+                            <div class="tab" :class="{ active: activeTab === 'update' }" @click="activeTab = 'update'">
+                                更新数据
+                            </div>
+                            <div class="tab" :class="{ active: activeTab === 'delete' }" @click="activeTab = 'delete'">
+                                删除数据
+                            </div>
+                        </div>
+                        
+                        <!-- 新增数据 -->
+                        <div class="tab-content" :class="{ active: activeTab === 'create' }">
+                            <div class="operation-card create">
+                                <div class="operation-title">
+                                    <span class="operation-icon">➕</span>
+                                    <span>新增数据</span>
+                                </div>
+                                <p>添加新的键值对到数据存储中</p>
+                                
+                                <div class="operation-form">
+                                    <div class="form-group">
+                                        <label for="create-key">键 (Key)</label>
+                                        <input type="text" id="create-key" v-model="createForm.key" placeholder="请输入键名">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="create-value">值 (Value)</label>
+                                        <textarea id="create-value" v-model="createForm.value" placeholder="请输入值内容"></textarea>
+                                    </div>
+                                    <button class="btn btn-success" @click="createData" :disabled="loading">
+                                        {{ loading && currentOperation === 'create' ? '提交中...' : '新增数据' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 查询数据 -->
+                        <div class="tab-content" :class="{ active: activeTab === 'read' }">
+                            <div class="operation-card read">
+                                <div class="operation-title">
+                                    <span class="operation-icon">🔍</span>
+                                    <span>查询数据</span>
+                                </div>
+                                <p>根据键名查询对应的值</p>
+                                
+                                <div class="operation-form">
+                                    <div class="form-group">
+                                        <label for="read-key">键 (Key)</label>
+                                        <input type="text" id="read-key" v-model="readForm.key" placeholder="请输入要查询的键名">
+                                    </div>
+                                    <button class="btn" @click="readData" :disabled="loading">
+                                        {{ loading && currentOperation === 'read' ? '查询中...' : '查询数据' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 更新数据 -->
+                        <div class="tab-content" :class="{ active: activeTab === 'update' }">
+                            <div class="operation-card update">
+                                <div class="operation-title">
+                                    <span class="operation-icon">✏️</span>
+                                    <span>更新数据</span>
+                                </div>
+                                <p>更新指定键的值</p>
+                                
+                                <div class="operation-form">
+                                    <div class="form-group">
+                                        <label for="update-key">键 (Key)</label>
+                                        <input type="text" id="update-key" v-model="updateForm.key" placeholder="请输入要更新的键名">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-value">值 (Value)</label>
+                                        <textarea id="update-value" v-model="updateForm.value" placeholder="请输入新的值内容"></textarea>
+                                    </div>
+                                    <button class="btn btn-warning" @click="updateData" :disabled="loading">
+                                        {{ loading && currentOperation === 'update' ? '更新中...' : '更新数据' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 删除数据 -->
+                        <div class="tab-content" :class="{ active: activeTab === 'delete' }">
+                            <div class="operation-card delete">
+                                <div class="operation-title">
+                                    <span class="operation-icon">🗑️</span>
+                                    <span>删除数据</span>
+                                </div>
+                                <p>删除指定键的数据</p>
+                                
+                                <div class="operation-form">
+                                    <div class="form-group">
+                                        <label for="delete-key">键 (Key)</label>
+                                        <input type="text" id="delete-key" v-model="deleteForm.key" placeholder="请输入要删除的键名">
+                                    </div>
+                                    <button class="btn btn-danger" @click="deleteData" :disabled="loading">
+                                        {{ loading && currentOperation === 'delete' ? '删除中...' : '删除数据' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div v-if="loading" class="loading">
+                            <div class="spinner"></div>
+                            <p>{{ loadingMessage }}</p>
+                        </div>
+                        
+                        <div v-if="message" :class="['message', messageType === 'success' ? 'message-success' : 'message-error']">
+                            {{ message }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据展示区域 -->
+                <div>
+                    <div class="card">
+                        <h2>操作历史</h2>
+                        
+                        <div class="data-display" v-if="operationHistory.length > 0">
+                            <div class="data-item" v-for="(history, index) in operationHistory.slice().reverse()" :key="index">
+                                <div class="data-key">{{ history.operation }} - {{ history.timestamp }}</div>
+                                <div class="data-value">
+                                    <div v-if="history.operation === '查询'">
+                                        键: {{ history.key }}<br>
+                                        结果: {{ history.result }}
+                                    </div>
+                                    <div v-else>
+                                        键: {{ history.key }}<br>
+                                        <span v-if="history.value">值: {{ history.value }}</span>
+                                        <span v-if="history.oldValue">原值: {{ history.oldValue }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="no-data" v-else>
+                            <div class="no-data-icon">📋</div>
+                            <h3>暂无操作记录</h3>
+                            <p>操作记录将显示在这里</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                michaelxu365@gmail.com｜key value 读写演示
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+        
+        createApp({
+            setup() {
+                // 响应式数据
+                const loading = ref(false);
+                const message = ref('');
+                const messageType = ref('success');
+                const activeTab = ref('create');
+                const currentOperation = ref('');
+                const loadingMessage = ref('');
+                const operationHistory = ref([]);
+                const baseURL = 'http://hongruxu.com:9999/hello';
+                
+                // 表单数据
+                const createForm = ref({
+                    key: '',
+                    value: ''
+                });
+                
+                const readForm = ref({
+                    key: ''
+                });
+                
+                const updateForm = ref({
+                    key: '',
+                    value: ''
+                });
+                
+                const deleteForm = ref({
+                    key: ''
+                });
+                
+                // 显示消息
+                const showMessage = (text, type = 'success') => {
+                    message.value = text;
+                    messageType.value = type;
+                    setTimeout(() => {
+                        message.value = '';
+                    }, 10000); // 提示消息10秒后消失
+                };
+                
+                // 添加操作记录
+                const addHistory = (operation, key, value = null, oldValue = null, result = null) => {
+                    operationHistory.value.push({
+                        operation,
+                        key,
+                        value,
+                        oldValue,
+                        result,
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    
+                    // 限制历史记录数量
+                    if (operationHistory.value.length > 10) {
+                        operationHistory.value.shift();
+                    }
+                };
+                
+                // 新增数据
+                const createData = async () => {
+                    if (!createForm.value.key) {
+                        showMessage('请输入键名', 'error');
+                        return;
+                    }
+                    
+                    if (!createForm.value.value) {
+                        showMessage('请输入值内容', 'error');
+                        return;
+                    }
+                    
+                    loading.value = true;
+                    currentOperation.value = 'create';
+                    loadingMessage.value = '正在添加数据...';
+                    
+                    try {
+                        // 使用axios发送POST请求
+                        const response = await axios.post(`${baseURL}/${createForm.value.key}`,createForm.value.value);
+                        
+                        // 添加操作记录
+                        addHistory('新增', createForm.value.key, createForm.value.value);
+                        
+                        // 显示成功消息
+                        showMessage(`数据 "${createForm.value.key}" 添加成功`);
+                        
+                        // 清空表单
+                        createForm.value.key = '';
+                        createForm.value.value = '';
+                        
+                    } catch (error) {
+                        showMessage(`添加数据失败: ${error.message}`, 'error');
+                    } finally {
+                        loading.value = false;
+                        currentOperation.value = '';
+                    }
+                };
+                
+                // 查询数据
+                const readData = async () => {
+                    
+                    loading.value = true;
+                    currentOperation.value = 'read';
+                    loadingMessage.value = '正在查询数据...';
+                    
+                    try {
+                        url = `${baseURL}`;
+                        if (readForm.value.key != '') {
+                            url = `${url}/${readForm.value.key}`;
+                        }
+                        const response = await axios.get(url);
+
+                        if (response) {
+                            // 添加操作记录
+                            addHistory('查询', readForm.value.key, null, null, response.data);
+                            
+                            showMessage(`查询成功: key=${readForm.value.key},value=${JSON.stringify(response.data)}`);
+                        } else {
+                            showMessage(`未找到键名为 "${readForm.value.key}" 的数据`, 'error');
+                        }
+                        
+                    } catch (error) {
+                        showMessage(`查询数据失败: ${error.message}`, 'error');
+                    } finally {
+                        loading.value = false;
+                        currentOperation.value = '';
+                    }
+                };
+                
+                // 更新数据
+                const updateData = async () => {
+                    if (!updateForm.value.key) {
+                        showMessage('请输入要更新的键名', 'error');
+                        return;
+                    }
+                    
+                    if (!updateForm.value.value) {
+                        showMessage('请输入新的值内容', 'error');
+                        return;
+                    }
+                    
+                    loading.value = true;
+                    currentOperation.value = 'update';
+                    loadingMessage.value = '正在更新数据...';
+                    
+                    try {
+                        const response = await axios.post(`${baseURL}/${updateForm.value.key}`,updateForm.value.value);
+                        // 添加操作记录
+                        addHistory('更新', updateForm.value.key, updateForm.value.value,null);
+                        
+                        // 显示成功消息
+                        showMessage(`数据 "${updateForm.value.key}" 更新成功`);
+                        
+                        // 清空表单
+                        updateForm.value.key = '';
+                        updateForm.value.value = '';
+                        
+                    } catch (error) {
+                        showMessage(`更新数据失败: ${error.message}`, 'error');
+                    } finally {
+                        loading.value = false;
+                        currentOperation.value = '';
+                    }
+                };
+                
+                // 删除数据
+                const deleteData = async () => {
+                    if (!deleteForm.value.key) {
+                        showMessage('请输入要删除的键名', 'error');
+                        return;
+                    }
+                    
+                    loading.value = true;
+                    currentOperation.value = 'delete';
+                    loadingMessage.value = '正在删除数据...';
+                    
+                    try {
+                        const response = await axios.delete(`${baseURL}/${deleteForm.value.key}`);
+                        // 添加操作记录
+                        addHistory('删除', deleteForm.value.key, null, null);
+                        
+                        // 显示成功消息
+                        showMessage(`数据 "${deleteForm.value.key}" 删除成功`);
+                        
+                        // 清空表单
+                        deleteForm.value.key = '';
+                        
+                    } catch (error) {
+                        showMessage(`删除数据失败: ${error.message}`, 'error');
+                    } finally {
+                        loading.value = false;
+                        currentOperation.value = '';
+                    }
+                };
+                
+                // 确认删除
+                const confirmDelete = (key) => {
+                    if (confirm(`确定要删除键为 "${key}" 的数据吗？`)) {
+                        deleteForm.value.key = key;
+                        deleteData();
+                    }
+                };
+                
+                
+                return {
+                    loading,
+                    message,
+                    messageType,
+                    activeTab,
+                    currentOperation,
+                    loadingMessage,
+                    operationHistory,
+                    createForm,
+                    readForm,
+                    updateForm,
+                    deleteForm,
+                    createData,
+                    readData,
+                    updateData,
+                    deleteData,
+                    confirmDelete
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

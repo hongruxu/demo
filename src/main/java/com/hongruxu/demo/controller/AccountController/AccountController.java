@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -103,7 +104,7 @@ public class AccountController {
     @Tag(name = "transfer", description = "转账操作")
     @ApiResponse(responseCode = "500", description = "交易失败")
     @PostMapping("/transfer")
-    @Transactional
+    @Transactional(isolation =Isolation.SERIALIZABLE) // 防止幻读
     public Result transfer(@RequestBody AccountTransfer trans) {
         Result ret = new Result();
         // 这里对参数做一些简单的判断
@@ -166,7 +167,7 @@ public class AccountController {
         if(count == 1) {
             ret.setCode(0);
             ret.setMessage("成功");
-            ret.setContent(1);
+            ret.setContent(account);
             return ret;
         }
         ret.setCode(-1);

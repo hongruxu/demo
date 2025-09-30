@@ -14,10 +14,10 @@ import com.hongruxu.demo.entity.Account;
 
 public interface AccountMapper {
 
-    @Select("select * from account where account_id=#{accountId}")
+    @Select("SELECT * FROM account WHERE account_id=#{accountId}")
     Account getById(@Param("accountId") Integer accountId);
 
-    @Select("select * from account")
+    @Select("SELECT * FROM account")
     List<Account> getAll();
 
     // 新建账号

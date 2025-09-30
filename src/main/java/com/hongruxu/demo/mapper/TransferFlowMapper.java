@@ -11,13 +11,13 @@ import com.hongruxu.demo.entity.TransferFlow;
 
 public interface TransferFlowMapper {
 
-    @Select("SELECT * FROM transfer_flow WHERE from_account=#{fromAccount}")
+    @Select("SELECT * FROM transfer_flow WHERE from_account=#{fromAccount} ORDER BY op_time DESC")
     List<TransferFlow> getTransByFromAccount(@Param("fromAccount") Integer fromAccount);
 
-    @Select("SELECT * FROM transfer_flow WHERE to_account=#{toAccount}")
+    @Select("SELECT * FROM transfer_flow WHERE to_account=#{toAccount} ORDER BY op_time DESC")
     List<TransferFlow> getTransByToAccount(@Param("toAccount") Integer toAccount);
 
-    @Select("SELECT * FROM transfer_flow WHERE from_account = #{account} OR to_account=#{account}")
+    @Select("SELECT * FROM transfer_flow WHERE from_account = #{account} OR to_account=#{account} ORDER BY op_time DESC")
     List<TransferFlow> getTransByAccount(@Param("account") Integer account);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")

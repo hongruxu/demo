@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue模拟转账系统</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, #1a936f 0%, #88d498 100%);
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .tabs {
+      display: flex;
+      background: white;
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .tab:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .tab.active {
+      color: #1a936f;
+      border-bottom: 3px solid #1a936f;
+      background-color: #f8f9fa;
+    }
+    
+    .tab-content {
+      background: white;
+      border-radius: 0 0 10px 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 25px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: #1a936f;
+      box-shadow: 0 0 0 2px rgba(26, 147, 111, 0.2);
+    }
+    
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .btn-primary {
+      background-color: #1a936f;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #157a5e;
+      transform: translateY(-2px);
+    }
+    
+    .btn-success {
+      background-color: #2ecc71;
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background-color: #27ae60;
+      transform: translateY(-2px);
+    }
+    
+    .btn-warning {
+      background-color: #f39c12;
+      color: white;
+    }
+    
+    .btn-warning:hover {
+      background-color: #e67e22;
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+    }
+    
+    .transaction-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .transaction-table th, .transaction-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .transaction-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    
+    .transaction-table tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .amount-positive {
+      color: #2ecc71;
+      font-weight: 600;
+    }
+    
+    .amount-negative {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+    
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    
+    .success-message {
+      color: #2ecc71;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    
+    .info-message {
+      color: #3498db;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #7f8c8d;
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+    
+    .account-balance {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a936f;
+      margin-top: 10px;
+    }
+    
+    .transfer-result {
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      background-color: #f8f9fa;
+    }
+    
+    .account-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .footer {
+        margin-top: 50px;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+    .account-info span {
+      font-weight: 600;
+    }
+    
+    .flex-container {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .flex-item {
+      flex: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .flex-container {
+        flex-direction: column;
+      }
+      
+      .transaction-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container">
+    <header>
+      <h1><i class="fas fa-money-bill-transfer"></i> 模拟转账系统</h1>
+      <p class="subtitle">Vue实现的账户管理与转账功能</p>
+    </header>
+    
+    <div class="tabs">
+      <div 
+        class="tab" 
+        :class="{ active: activeTab === 'balance' }" 
+        @click="activeTab = 'balance'"
+      >
+        <i class="fas fa-wallet"></i> 余额查询
+      </div>
+      <div 
+        class="tab" 
+        :class="{ active: activeTab === 'transfer' }" 
+        @click="activeTab = 'transfer'"
+      >
+        <i class="fas fa-exchange-alt"></i> 转账功能
+      </div>
+      <div 
+        class="tab" 
+        :class="{ active: activeTab === 'history' }" 
+        @click="activeTab = 'history'"
+      >
+        <i class="fas fa-history"></i> 交易记录
+      </div>
+      <div 
+        class="tab" 
+        :class="{ active: activeTab === 'create' }" 
+        @click="activeTab = 'create'"
+      >
+        <i class="fas fa-plus-circle"></i> 创建账户
+      </div>
+    </div>
+    
+    <!-- 余额查询 -->
+    <div class="tab-content" v-if="activeTab === 'balance'">
+      <h2 class="card-title">账户余额查询</h2>
+      <div class="form-group">
+        <label for="balanceAccount">账户ID(从10000开始自增)</label>
+        <input type="text" id="balanceAccount" v-model="balanceQuery.accountId" placeholder="请输入账户ID">
+        <div class="error-message" v-if="balanceError">{{ balanceError }}</div>
+      </div>
+      <button class="btn-primary" @click="checkBalance">查询余额</button>
+      
+      <div v-if="balanceResult" class="account-balance">
+        账户余额: ¥{{ balanceResult.balance }}
+      </div>
+    </div>
+    
+    <!-- 转账功能 -->
+    <div class="tab-content" v-if="activeTab === 'transfer'">
+      <h2 class="card-title">转账操作</h2>
+      <div class="flex-container">
+        <div class="flex-item">
+          <div class="form-group">
+            <label for="fromAccount">出账账户(ID 从10000开始自增)</label>
+            <input type="text" id="fromAccount" v-model="transferData.fromAccount" placeholder="请输入出账户ID">
+            <div class="error-message" v-if="transferErrors.fromAccount">{{ transferErrors.fromAccount }}</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="toAccount">入账账户(ID 从10000开始自增)</label>
+            <input type="text" id="toAccount" v-model="transferData.toAccount" placeholder="请输入账户ID">
+
+            <div class="error-message" v-if="transferErrors.toAccount">{{ transferErrors.toAccount }}</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="amount">转账金额 (¥)(整数)</label>
+            <input type="number" id="amount" v-model.number="transferData.amount" placeholder="请输入转账金额">
+            <div class="error-message" v-if="transferErrors.amount">{{ transferErrors.amount }}</div>
+          </div>
+          
+          <button class="btn-success" @click="transfer">确认转账</button>
+          <div class="error-message" v-if="transferErrors.result">{{ transferErrors.result }}</div>
+        </div>
+        
+        <div class="flex-item" v-if="transferResult">
+          <div class="transfer-result">
+            <h3>转账结果</h3>
+            <div class="account-info">
+              <span>出账账户:</span> {{ transferResult.fromAccount }}
+            </div>
+            <div class="account-info">
+              <span>入账账户:</span> {{ transferResult.toAccount }}
+            </div>
+            <div class="account-info">
+              <span>转账金额:</span> ¥{{ transferResult.amount }}
+            </div>
+            <div class="account-info">
+              <span>出账账户当前余额:</span> ¥{{ transferResult.fromBalance }}
+            </div>
+            <div class="account-info">
+              <span>入账账户当前余额:</span> ¥{{ transferResult.toBalance }}
+            </div>
+            <div class="account-info">
+              <span>交易时间:</span> {{ transferResult.opTime}}
+            </div>
+            <div class="account-info">
+              <span>交易状态:</span> <span style="color: #2ecc71;">成功</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 交易记录 -->
+    <div class="tab-content" v-if="activeTab === 'history'">
+      <h2 class="card-title">交易记录查询</h2>
+      <div class="form-group">
+        <label for="historyAccount">账户ID</label>
+        <input type="text" id="historyAccount" v-model="historyQuery.accountId" placeholder="请输入账户ID">
+        <div class="error-message" v-if="historyError">{{ historyError }}</div>
+      </div>
+      
+      <div class="form-group">
+        <label>记录类型</label>
+            <div>
+            <input type="radio" id="all" value="all" v-model="historyQuery.type">
+            <label for="all" style="display: inline; margin-right: 15px;">全部记录</label>
+            
+            <input type="radio" id="outgoing" value="outgoing" v-model="historyQuery.type">
+            <label for="outgoing" style="display: inline; margin-right: 15px;">出账记录</label>
+            
+            <input type="radio" id="incoming" value="incoming" v-model="historyQuery.type">
+            <label for="incoming" style="display: inline;">入账记录</label>
+            </div>
+      </div>
+      
+      <button class="btn-primary" @click="getTransactionHistory">查询记录</button>
+      
+      <div v-if="historyResult.length > 0">
+        <table class="transaction-table">
+          <thead>
+            <tr>
+              <th>交易时间</th>
+              <th>出账账户</th>
+              <th>入账账户</th>
+              <th>金额</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="transaction in historyResult" :key="transaction.id">
+              <td>{{ transaction.opTime }}</td>
+              <td>{{ transaction.fromAccount }}</td>
+              <td>{{ transaction.toAccount }}</td>
+
+              <td :class="transaction.fromAccount == historyQuery.accountId ? 'amount-negative' : 'amount-positive'">
+                {{ transaction.fromAccount == historyQuery.accountId ? '-' : '+' }}¥{{ transaction.amount }}
+              </td>
+              <td>{{ transaction.fromAccount == historyQuery.accountId ? '出账' : '入账' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="empty-state" v-else-if="historyQuery.accountId && !historyError">
+        <i class="fas fa-search"></i>
+        <p>未找到相关交易记录</p>
+      </div>
+    </div>
+    
+    <!-- 创建账户 -->
+    <div class="tab-content" v-if="activeTab === 'create'">
+      <h2 class="card-title">创建新账户</h2>
+      <div class="form-group">
+        <label for="initialBalance">初始金额 (¥)</label>
+        <input type="number" id="initialBalance" v-model.number="newAccount.initialBalance" placeholder="请输入初始金额">
+        <div class="error-message" v-if="createAccountError">{{ createAccountError }}</div>
+      </div>
+      <button class="btn-primary" @click="createAccount">创建账户</button>
+      
+      <div v-if="newAccountResult" class="success-message">
+        <p>账户创建成功！</p>
+        <p>账户ID: <strong>{{ newAccountResult.accountId }}</strong></p>
+        <p>初始余额: <strong>¥{{ newAccountResult.balance }}</strong></p>
+      </div>
+    </div>
+    
+        <div class="footer">
+            <p>michaelxu365@gmail.com | 模拟转账</p>
+        </div>
+  </div>
+
+  <script>
+    const { createApp, ref, computed, onMounted } = Vue;
+    
+    createApp({
+      setup() {
+        // 当前激活的Tab
+        const activeTab = ref('balance');
+        const baseURL = 'http://hongruxu:9999';
+
+        // 余额查询相关
+        const balanceQuery = ref({
+          accountId: ''
+        });
+        
+        const balanceError = ref('');
+        const balanceResult = ref(null);
+        
+        // 转账相关
+        const transferData = ref({
+          fromAccount: '',
+          toAccount: '',
+          amount: ''
+        });
+        
+        const transferErrors = ref({});
+        const transferResult = ref(null);
+        
+        // 交易记录查询相关
+        const historyQuery = ref({
+          accountId: '',
+          type: 'all'
+        });
+        
+        const historyError = ref('');
+        const historyResult = ref([]);
+        
+        // 创建账户相关
+        const newAccount = ref({
+          initialBalance: ''
+        });
+        
+        const createAccountError = ref('');
+        const newAccountResult = ref(null);
+        
+        // 查询余额
+        const checkBalance = async () => {
+          balanceError.value = '';
+          balanceResult.value = null;
+          
+          if (!balanceQuery.value.accountId) {
+            balanceError.value = '请输入账户ID';
+            return;
+          }
+          
+          try{
+            // 使用axios发送请求
+            const response = await axios.get(`${baseURL}/account/${balanceQuery.value.accountId}`);
+            if (response.status == 200) {
+                if(response.data.code == 0){
+                    balanceResult.value = { ...response.data.content};
+                } else {
+                    balanceError.value = `code:${response.data.code},message:${response.data.message}`;
+                }
+                return; 
+            }
+          }catch(error){
+            balanceError.value = error;
+          }
+          balanceError.value = "请求失败";
+          return;
+          
+        };
+        
+        // 转账操作
+        const transfer = async () => {
+          // 重置错误和结果
+          transferErrors.value = {};
+          transferResult.value = null;
+          
+          // 验证输入
+          if (!transferData.value.fromAccount) {
+            transferErrors.value.fromAccount = '请选择出账账户';
+          }
+          
+          if (!transferData.value.toAccount) {
+            transferErrors.value.toAccount = '请选择入账账户';
+          } else if (transferData.value.fromAccount === transferData.value.toAccount) {
+            transferErrors.value.toAccount = '出账账户和入账账户不能相同';
+          }
+          
+          if (!transferData.value.amount) {
+            transferErrors.value.amount = '请输入转账金额';
+          } else if (transferData.value.amount <= 0) {
+            transferErrors.value.amount = '转账金额必须大于0';
+          }
+          
+          // 如果有错误，停止执行
+          if (Object.keys(transferErrors.value).length > 0) {
+            return;
+          }
+          try{
+            // 使用axios发送P请求
+            const response = await axios.post(`${baseURL}/transfer`,`{
+                        "fromAccount": ${transferData.value.fromAccount},
+                        "toAccount": ${transferData.value.toAccount},
+                        "amount": ${transferData.value.amount}
+                        }`,{"headers":{"Content-type":"application/json"}});  
+            if (response.status == 200) {
+                if(response.data.code == 0){
+                    // 设置转账结果
+                    transferResult.value = { ...response.data.content}
+                } else {
+                    transferErrors.value.result = `code:${response.data.code},message:${response.data.message}`;
+                }
+                return; 
+            }
+          }catch(error){
+            transferErrors.value.result = error;
+          }
+          transferErrors.value.result = "请求失败";
+          // 重置表单
+          transferData.value = {
+            fromAccount: '',
+            toAccount: '',
+            amount: ''
+          };
+        };
+        
+        // 查询交易记录
+        const getTransactionHistory = async () => {
+          historyError.value = '';
+          historyResult.value = [];
+          
+          if (!historyQuery.value.accountId) {
+            historyError.value = '请输入账户ID';
+            return;
+          }
+          
+          path = "transfer"
+          // 根据类型过滤交易记录
+          if (historyQuery.value.type === 'all') {
+            path = `${path}/${historyQuery.value.accountId}`
+          } else if (historyQuery.value.type === 'outgoing') {
+            path = `${path}/from/${historyQuery.value.accountId}`
+          } else if (historyQuery.value.type === 'incoming') {
+            path = `${path}/to/${historyQuery.value.accountId}`
+          }
+          try{
+            // 使用axios发送请求
+            const response = await axios.get(`${baseURL}/${path}`);
+            if (response.status == 200) {
+                if(response.data.code == 0){
+                    historyResult.value = response.data.content;
+                } else {
+                    historyError.value = `code:${response.data.code},message:${response.data.message}`;
+                }
+                return; 
+            }
+          }catch(error){
+            historyError.value = error;
+          }
+          historyError.value = "请求失败";
+          return;
+        };
+        
+        // 创建账户
+        const createAccount = async() => {
+          createAccountError.value = '';
+          newAccountResult.value = null;
+          
+          if (!newAccount.value.initialBalance) {
+            createAccountError.value = '请输入初始金额';
+            return;
+          }
+          
+          if (newAccount.value.initialBalance < 0) {
+            createAccountError.value = '初始金额不能为负数';
+            return;
+          }
+          
+          try{
+        // 使用axios发送P请求
+        const response = await axios.post(`${baseURL}/account`,`{
+                    "balance": ${newAccount.value.initialBalance}
+                    }`,{"headers":{"Content-type":"application/json"}});  
+        if (response.status == 200) {
+            if(response.data.code == 0){
+                // 设置转账结果
+                newAccountResult.value = {...response.data.content}
+            } else {
+                transferErrors.value.result = `code:${response.data.code},message:${response.data.message}`;
+            }
+            return; 
+          }
+        }catch(error){
+            transferErrors.value.result = error;
+        }
+          newAccountResult.value = "请求失败";
+          // 重置表单
+          newAccount.value = {
+            initialBalance: ''
+          };
+        };
+        
+        return {
+          activeTab,
+          balanceQuery,
+          balanceError,
+          balanceResult,
+          transferData,
+          transferErrors,
+          transferResult,
+          historyQuery,
+          historyError,
+          historyResult,
+          newAccount,
+          createAccountError,
+          newAccountResult,
+          checkBalance,
+          transfer,
+          getTransactionHistory,
+          createAccount
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
