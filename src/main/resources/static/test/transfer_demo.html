@@ -295,7 +295,7 @@
   <div id="app" class="container">
     <header>
       <h1><i class="fas fa-money-bill-transfer"></i> 模拟转账系统</h1>
-      <p class="subtitle">Vue实现的账户管理与转账功能</p>
+      <p class="subtitle">Vue实现的账户管理与转账功能(所有金额为整数)</p>
     </header>
     
     <div class="tabs">
@@ -431,22 +431,30 @@
           <thead>
             <tr>
               <th>交易时间</th>
-              <th>出账账户</th>
-              <th>入账账户</th>
+              <th>查询账户</th>
+              <th>查询账户余额</th>
+              <th>对手账户</th>
+              <th>对手账户余额</th>
               <th>金额</th>
+              
               <th>类型</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="transaction in historyResult" :key="transaction.id">
               <td>{{ transaction.opTime }}</td>
-              <td>{{ transaction.fromAccount }}</td>
-              <td>{{ transaction.toAccount }}</td>
+              <td>{{ historyQuery.accountId }}</td>
+              <td>¥{{ transaction.fromAccount == historyQuery.accountId ? transaction.fromBalance : transaction.toBalance }}</td>
+              <td>{{ transaction.fromAccount == historyQuery.accountId ? transaction.toAccount : transaction.fromAccount }}</td>
+              <td>¥{{ transaction.fromAccount == historyQuery.accountId ? transaction.toBalance : transaction.fromBalance}}</td>
+
 
               <td :class="transaction.fromAccount == historyQuery.accountId ? 'amount-negative' : 'amount-positive'">
                 {{ transaction.fromAccount == historyQuery.accountId ? '-' : '+' }}¥{{ transaction.amount }}
               </td>
-              <td>{{ transaction.fromAccount == historyQuery.accountId ? '出账' : '入账' }}</td>
+              <td :class="transaction.fromAccount == historyQuery.accountId ? 'amount-negative' : 'amount-positive'">
+                {{ transaction.fromAccount == historyQuery.accountId ? '出账' : '入账' }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -487,8 +495,8 @@
       setup() {
         // 当前激活的Tab
         const activeTab = ref('balance');
-        const baseURL = 'http://114.132.58.71:9999';
-
+        const wPath = window.document.location.href;
+        const baseURL = wPath.substring(0, wPath.indexOf("/test"))
         // 余额查询相关
         const balanceQuery = ref({
           accountId: ''

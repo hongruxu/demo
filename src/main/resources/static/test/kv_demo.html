@@ -191,7 +191,9 @@
                 const currentOperation = ref('');
                 const loadingMessage = ref('');
                 const operationHistory = ref([]);
-                const baseURL = 'http://114.132.58.71:9999/hello';
+                //const baseURL = 'http://114.132.58.71:9999/hello';
+                const wPath = window.document.location.href;
+                const baseURL = wPath.substring(0, wPath.indexOf("/test")) + '/hello'
                 
                 // 表单数据
                 const createForm = ref({

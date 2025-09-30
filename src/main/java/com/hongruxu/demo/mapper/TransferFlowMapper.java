@@ -20,9 +20,12 @@ public interface TransferFlowMapper {
     @Select("SELECT * FROM transfer_flow WHERE from_account = #{account} OR to_account=#{account} ORDER BY op_time DESC")
     List<TransferFlow> getTransByAccount(@Param("account") Integer account);
 
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Select("SELECT * FROm transfer_flow WHERE id=${id}")
+    TransferFlow getTransferFlowById(Integer id);
+
+    @Options( useGeneratedKeys = true,  keyProperty = "id" )
+    //@SelectKey(statement = "SELECT id, op_time FROM transfer_flow WHERE id= (SELECT max(id) FROM transfer_flow)",keyProperty = "op_time",resultType = String.class, before = false)
     @Insert("INSERT INTO transfer_flow (from_account,to_account,amount,from_balance,to_balance)"+
         " values (#{transferFlow.fromAccount},#{transferFlow.toAccount},#{transferFlow.amount},#{transferFlow.fromBalance},#{transferFlow.toBalance})")
     int insert(@Param("transferFlow") TransferFlow transferFlow);
-
 } 

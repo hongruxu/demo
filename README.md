@@ -10,21 +10,22 @@
 - 系统监控 [监控演示](http://114.132.58.71:3000/d/X034JGT7Gz) 用户名：admin, 密码：micMIC123
 - 系统指标 [指标地址](http://114.132.58.71:9999/actuator)
 
+## 架构简图
+![架构图](arch.png)
 
 ## 部署方法
-1. 单机测试验证，Docker反而太重，暂不用，不过Dockerfile已经提供。
-2. 采用机器直接部署的方式，前提条件需要建好数据库表和一台装有JDK的机器
-3. 修改代码对应的数据库连接配置 (resources/application.yml)
-4. 修改copy_to_test.sh脚本中的机器IP，部署目录等
-5. 执行copy_to_test.sh，中间会需要交互输出密码，如在机器装上ssh key，可免密部署
+1. 采用机器直接部署的方式，前提条件需要建好数据库表和一台装有JDK的机器
+2. 修改代码对应的数据库连接配置 (resources/application.yml)
+3. 修改copy_to_test.sh脚本中的机器IP，部署目录等
+4. 执行copy_to_test.sh，中间会需要交互输出密码，如在机器装上ssh key，可免密部署
 
 ## 说明
 - 本代码只为演示基本功能，未考虑安全和一些运营标准。
 - 配置中的数据库密码等名文提交也是不符合运营标准的，需要有另外的方法或是相应的平台管理密码
 - 代码中的openapi描述写的较少，理论上也是不需要多写，如果都遵循RESTful规范，加上好的命名，描述是可以少写的。
-- 示例代码逻辑轻，没有单独做service层
+- 示例代码逻辑轻，有些没有单独做service层
 - 异常处理未做标准化处理，后续待完善
-- 代码后台数据库为腾讯云上mysql,因一些资源原因，采用外网地址连接，现实不应该这样！！！
+- 代码后台数据库为腾讯云上mysql,因一些资源原因，采用外网地址连接，生产中应该避免。
 
 ## 数据库定义
 
@@ -51,6 +52,7 @@ CREATE TABLE `transfer_flow` (
   `op_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `from_to_account` (`from_account`,`to_account`)
+  KEY `to_from_account` (`to_account`,`from_account`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4
 ```
 
@@ -94,6 +96,7 @@ CREATE TABLE `user` (
 
 ## 2025-09-30
 - 用 vue 简单的实现了调用接口的页面，便于测试接口和演示功能
+- 转账逻辑封装了一层service
 
 ## 问题解决
 1. lombok 无法正常使用，需要在pom.xml中对build部分进行设置,正确设置如下，如果通过spring boot 工具自动生成，是没有maven这一节的，也没有关于lombok的相关配置

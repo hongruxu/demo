@@ -19,6 +19,6 @@ public class TransferFlow {
      @Schema(description = "转入账号操作后余额",example = "100")
     Integer toBalance;
     @Schema(description = "操作时间",example = "2025-01-01 00:00:00")
-    java.util.Date opTime;
+    String opTime;
     
 }
