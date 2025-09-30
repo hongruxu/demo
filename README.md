@@ -5,10 +5,10 @@
 - hello 部分的数据操作，后端是一个用map实现的简单内存数据块。服务重启内容丢失
 - user 部分为针对一个定义了 id, user_name, email, age等字段的一张简单的数据表的相关操作
 - account 部分是一个简单模拟两个账户互转的逻辑
-- 主要功能 [功能演示](http://hongruxu.com:9999/test/index.html)
-- 协议文档 [openapi](http://hongruxu.com:9999/swagger-ui/index.html)
-- 系统监控 [监控演示](http://hongruxu.com:3000/d/X034JGT7Gz) 用户名：admin, 密码：micMIC123
-- 系统指标 [指标地址](http://hongruxu.com:9999/actuator)
+- 主要功能 [功能演示](http://114.132.58.71:9999/test/index.html)
+- 协议文档 [openapi](http://114.132.58.71:9999/swagger-ui/index.html)
+- 系统监控 [监控演示](http://114.132.58.71:3000/d/X034JGT7Gz) 用户名：admin, 密码：micMIC123
+- 系统指标 [指标地址](http://114.132.58.71:9999/actuator)
 
 
 ## 部署方法
