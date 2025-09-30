@@ -413,15 +413,15 @@
       <div class="form-group">
         <label>记录类型</label>
             <div>
-            <input type="radio" id="all" value="all" v-model="historyQuery.type">
-            <label for="all" style="display: inline; margin-right: 15px;">全部记录</label>
-            
-            <input type="radio" id="outgoing" value="outgoing" v-model="historyQuery.type">
-            <label for="outgoing" style="display: inline; margin-right: 15px;">出账记录</label>
-            
-            <input type="radio" id="incoming" value="incoming" v-model="historyQuery.type">
-            <label for="incoming" style="display: inline;">入账记录</label>
+            <select id="all" v-model="historyQuery.type">
+              <option value = "all">全部记录</option>
+              <option value = "outgoing">出账记录</option>
+              <option value = "incoming">入账记录</option>
+
+            </select>
+ 
             </div>
+
       </div>
       
       <button class="btn-primary" @click="getTransactionHistory">查询记录</button>
@@ -443,27 +443,23 @@
           <tbody>
             <tr v-for="transaction in historyResult" :key="transaction.id">
               <td>{{ transaction.opTime }}</td>
-              <td>{{ historyQuery.accountId }}</td>
-              <td>¥{{ transaction.fromAccount == historyQuery.accountId ? transaction.fromBalance : transaction.toBalance }}</td>
-              <td>{{ transaction.fromAccount == historyQuery.accountId ? transaction.toAccount : transaction.fromAccount }}</td>
-              <td>¥{{ transaction.fromAccount == historyQuery.accountId ? transaction.toBalance : transaction.fromBalance}}</td>
+              <td>{{ currentQueryAccountID }}</td>
+              <td>¥{{ transaction.fromAccount == currentQueryAccountID ? transaction.fromBalance : transaction.toBalance }}</td>
+              <td>{{ transaction.fromAccount == currentQueryAccountID ? transaction.toAccount : transaction.fromAccount }}</td>
+              <td>¥{{ transaction.fromAccount == currentQueryAccountID ? transaction.toBalance : transaction.fromBalance}}</td>
 
 
-              <td :class="transaction.fromAccount == historyQuery.accountId ? 'amount-negative' : 'amount-positive'">
-                {{ transaction.fromAccount == historyQuery.accountId ? '-' : '+' }}¥{{ transaction.amount }}
+              <td :class="transaction.fromAccount == currentQueryAccountID ? 'amount-negative' : 'amount-positive'">
+                {{ transaction.fromAccount == currentQueryAccountID ? '-' : '+' }}¥{{ transaction.amount }}
               </td>
-              <td :class="transaction.fromAccount == historyQuery.accountId ? 'amount-negative' : 'amount-positive'">
-                {{ transaction.fromAccount == historyQuery.accountId ? '出账' : '入账' }}
+              <td :class="transaction.fromAccount == currentQueryAccountID ? 'amount-negative' : 'amount-positive'">
+                {{ transaction.fromAccount == currentQueryAccountID ? '出账' : '入账' }}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       
-      <div class="empty-state" v-else-if="historyQuery.accountId && !historyError">
-        <i class="fas fa-search"></i>
-        <p>未找到相关交易记录</p>
-      </div>
     </div>
     
     <!-- 创建账户 -->
@@ -531,6 +527,7 @@
         
         const createAccountError = ref('');
         const newAccountResult = ref(null);
+        const currentQueryAccountID = ref(null);
         
         // 查询余额
         const checkBalance = async () => {
@@ -620,6 +617,7 @@
         const getTransactionHistory = async () => {
           historyError.value = '';
           historyResult.value = [];
+          currentQueryAccountID.value = historyQuery.value.accountId;
           
           if (!historyQuery.value.accountId) {
             historyError.value = '请输入账户ID';
@@ -706,6 +704,7 @@
           newAccount,
           createAccountError,
           newAccountResult,
+          currentQueryAccountID,
           checkBalance,
           transfer,
           getTransactionHistory,

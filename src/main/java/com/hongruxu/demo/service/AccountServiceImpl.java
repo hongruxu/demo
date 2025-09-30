@@ -33,9 +33,9 @@ public class AccountServiceImpl implements AccountService {
         switch (type) {
             case ALL:
                 return transferFlowMapper.getTransByAccount(accountId);
-            case IN:
-                return transferFlowMapper.getTransByFromAccount(accountId);
             case OUT:
+                return transferFlowMapper.getTransByFromAccount(accountId);
+            case IN:
                 return transferFlowMapper.getTransByToAccount(accountId);
         }
         return null;
