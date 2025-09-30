@@ -9,6 +9,7 @@
 - 协议文档 [openapi](http://114.132.58.71:9999/swagger-ui/index.html)
 - 系统监控 [监控演示](http://114.132.58.71:3000/d/X034JGT7Gz) 用户名：admin, 密码：micMIC123
 - 系统指标 [指标地址](http://114.132.58.71:9999/actuator)
+- golang 调用示例 [项目地址](https://github.com/hongruxu/openapi-client-go-demo)
 
 ## 架构简图
 ![架构图](./arch.jpg)
