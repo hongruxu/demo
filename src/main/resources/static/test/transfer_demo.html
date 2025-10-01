@@ -7,289 +7,7 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background-color: #f5f7fa;
-      color: #333;
-      line-height: 1.6;
-      padding: 20px;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: linear-gradient(135deg, #1a936f 0%, #88d498 100%);
-      color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-    
-    .subtitle {
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
-    
-    .tabs {
-      display: flex;
-      background: white;
-      border-radius: 10px 10px 0 0;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-    
-    .tab {
-      flex: 1;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      border-bottom: 3px solid transparent;
-    }
-    
-    .tab:hover {
-      background-color: #f8f9fa;
-    }
-    
-    .tab.active {
-      color: #1a936f;
-      border-bottom: 3px solid #1a936f;
-      background-color: #f8f9fa;
-    }
-    
-    .tab-content {
-      background: white;
-      border-radius: 0 0 10px 10px;
-      padding: 25px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      margin-bottom: 25px;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 25px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-    
-    .card-title {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #2c3e50;
-      border-bottom: 2px solid #f0f0f0;
-      padding-bottom: 10px;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    
-    input, select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-    }
-    
-    input:focus, select:focus {
-      outline: none;
-      border-color: #1a936f;
-      box-shadow: 0 0 0 2px rgba(26, 147, 111, 0.2);
-    }
-    
-    button {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      margin-right: 10px;
-      margin-bottom: 10px;
-    }
-    
-    .btn-primary {
-      background-color: #1a936f;
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background-color: #157a5e;
-      transform: translateY(-2px);
-    }
-    
-    .btn-success {
-      background-color: #2ecc71;
-      color: white;
-    }
-    
-    .btn-success:hover {
-      background-color: #27ae60;
-      transform: translateY(-2px);
-    }
-    
-    .btn-warning {
-      background-color: #f39c12;
-      color: white;
-    }
-    
-    .btn-warning:hover {
-      background-color: #e67e22;
-      transform: translateY(-2px);
-    }
-    
-    .btn-danger {
-      background-color: #e74c3c;
-      color: white;
-    }
-    
-    .btn-danger:hover {
-      background-color: #c0392b;
-      transform: translateY(-2px);
-    }
-    
-    .transaction-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    
-    .transaction-table th, .transaction-table td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .transaction-table th {
-      background-color: #f8f9fa;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    
-    .transaction-table tr:hover {
-      background-color: #f8f9fa;
-    }
-    
-    .amount-positive {
-      color: #2ecc71;
-      font-weight: 600;
-    }
-    
-    .amount-negative {
-      color: #e74c3c;
-      font-weight: 600;
-    }
-    
-    .error-message {
-      color: #e74c3c;
-      font-size: 0.9rem;
-      margin-top: 5px;
-    }
-    
-    .success-message {
-      color: #2ecc71;
-      font-size: 0.9rem;
-      margin-top: 5px;
-    }
-    
-    .info-message {
-      color: #3498db;
-      font-size: 0.9rem;
-      margin-top: 5px;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: #7f8c8d;
-    }
-    
-    .empty-state i {
-      font-size: 3rem;
-      margin-bottom: 15px;
-      display: block;
-    }
-    
-    .account-balance {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1a936f;
-      margin-top: 10px;
-    }
-    
-    .transfer-result {
-      padding: 15px;
-      border-radius: 6px;
-      margin-top: 20px;
-      background-color: #f8f9fa;
-    }
-    
-    .account-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    .footer {
-        margin-top: 50px;
-        color: #7f8c8d;
-        font-size: 0.9rem;
-    }
-    .account-info span {
-      font-weight: 600;
-    }
-    
-    .flex-container {
-      display: flex;
-      gap: 20px;
-    }
-    
-    .flex-item {
-      flex: 1;
-    }
-    
-    @media (max-width: 768px) {
-      .tabs {
-        flex-direction: column;
-      }
-      
-      .flex-container {
-        flex-direction: column;
-      }
-      
-      .transaction-table {
-        display: block;
-        overflow-x: auto;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href = "./css/transfer_style.css">
 </head>
 <body>
   <div id="app" class="container">
@@ -299,32 +17,16 @@
     </header>
     
     <div class="tabs">
-      <div 
-        class="tab" 
-        :class="{ active: activeTab === 'balance' }" 
-        @click="activeTab = 'balance'"
-      >
+      <div class="tab" :class="{ active: activeTab === 'balance' }" @click="activeTab = 'balance'">
         <i class="fas fa-wallet"></i> 余额查询
       </div>
-      <div 
-        class="tab" 
-        :class="{ active: activeTab === 'transfer' }" 
-        @click="activeTab = 'transfer'"
-      >
+      <div class="tab" :class="{ active: activeTab === 'transfer' }" @click="activeTab = 'transfer'">
         <i class="fas fa-exchange-alt"></i> 转账功能
       </div>
-      <div 
-        class="tab" 
-        :class="{ active: activeTab === 'history' }" 
-        @click="activeTab = 'history'"
-      >
+      <div class="tab" :class="{ active: activeTab === 'history' }" @click="activeTab = 'history'">
         <i class="fas fa-history"></i> 交易记录
       </div>
-      <div 
-        class="tab" 
-        :class="{ active: activeTab === 'create' }" 
-        @click="activeTab = 'create'"
-      >
+      <div class="tab" :class="{ active: activeTab === 'create' }" @click="activeTab = 'create'">
         <i class="fas fa-plus-circle"></i> 创建账户
       </div>
     </div>
@@ -358,7 +60,6 @@
           <div class="form-group">
             <label for="toAccount">入账账户(ID 从10000开始自增)</label>
             <input type="text" id="toAccount" v-model="transferData.toAccount" placeholder="请输入账户ID">
-
             <div class="error-message" v-if="transferErrors.toAccount">{{ transferErrors.toAccount }}</div>
           </div>
           
@@ -413,19 +114,16 @@
       <div class="form-group">
         <label>记录类型</label>
             <div>
-            <select id="all" v-model="historyQuery.type">
-              <option value = "all">全部记录</option>
-              <option value = "outgoing">出账记录</option>
-              <option value = "incoming">入账记录</option>
-
-            </select>
- 
+              <select id="all" v-model="historyQuery.type">
+                <option value = "all">全部记录</option>
+                <option value = "outgoing">出账记录</option>
+                <option value = "incoming">入账记录</option>
+              </select>
             </div>
-
       </div>
       
       <button class="btn-primary" @click="getTransactionHistory">查询记录</button>
-      
+  
       <div v-if="historyResult.length > 0">
         <table class="transaction-table">
           <thead>
@@ -436,7 +134,6 @@
               <th>对手账户</th>
               <th>对手账户余额</th>
               <th>金额</th>
-              
               <th>类型</th>
             </tr>
           </thead>
@@ -447,8 +144,6 @@
               <td>¥{{ transaction.fromAccount == currentQueryAccountID ? transaction.fromBalance : transaction.toBalance }}</td>
               <td>{{ transaction.fromAccount == currentQueryAccountID ? transaction.toAccount : transaction.fromAccount }}</td>
               <td>¥{{ transaction.fromAccount == currentQueryAccountID ? transaction.toBalance : transaction.fromBalance}}</td>
-
-
               <td :class="transaction.fromAccount == currentQueryAccountID ? 'amount-negative' : 'amount-positive'">
                 {{ transaction.fromAccount == currentQueryAccountID ? '-' : '+' }}¥{{ transaction.amount }}
               </td>
@@ -478,7 +173,6 @@
         <p>初始余额: <strong>¥{{ newAccountResult.balance }}</strong></p>
       </div>
     </div>
-    
         <div class="footer">
             <p>michaelxu365@gmail.com | 模拟转账</p>
         </div>
@@ -519,7 +213,8 @@
         
         const historyError = ref('');
         const historyResult = ref([]);
-        
+        const currentQueryAccountID = ref(null);
+
         // 创建账户相关
         const newAccount = ref({
           initialBalance: ''
@@ -527,7 +222,6 @@
         
         const createAccountError = ref('');
         const newAccountResult = ref(null);
-        const currentQueryAccountID = ref(null);
         
         // 查询余额
         const checkBalance = async () => {

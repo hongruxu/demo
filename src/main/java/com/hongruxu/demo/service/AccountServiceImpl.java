@@ -24,28 +24,54 @@ public class AccountServiceImpl implements AccountService {
     private TransferFlowMapper transferFlowMapper;
 
     @Override
-    public Account getAccountById(Integer accountId){
-        return accountMapper.getById(accountId);
+    public Result<Account> getAccountById(Integer accountId){
+        Account a =  accountMapper.getById(accountId);
+        Result<Account> ret = new Result<Account>();
+        if(a== null){
+            ret.setCode(404);
+            ret.setMessage("账户不存在");
+        }else{
+            ret.setCode(0);
+            ret.setMessage("成功");
+            ret.setContent(a);
+        } 
+        return ret;
     }
 
     @Override
-    public List<TransferFlow> getTransferFlow(Integer accountId, TransferType type){
+    public Result<List<TransferFlow>> getTransferFlow(Integer accountId, TransferType type){
+        Result<List<TransferFlow>> ret = new Result<List<TransferFlow>>();
+        List<TransferFlow> l = null;
         switch (type) {
             case ALL:
-                return transferFlowMapper.getTransByAccount(accountId);
+                l =  transferFlowMapper.getTransByAccount(accountId);
+                break;
             case OUT:
-                return transferFlowMapper.getTransByFromAccount(accountId);
+                l =  transferFlowMapper.getTransByFromAccount(accountId);
+                break;
             case IN:
-                return transferFlowMapper.getTransByToAccount(accountId);
+                l = transferFlowMapper.getTransByToAccount(accountId);
+                break;
+            default:
+                ret.setCode(-1);
+                ret.setMessage("查询失败");
         }
-        return null;
+        if(l == null || l.isEmpty()){
+            ret.setCode(404);
+            ret.setMessage("没有可显示的内容");
+        }else {
+            ret.setCode(0);
+            ret.setMessage("成功");
+            ret.setContent(l);
+        }
+        return ret;
     }
 
     @Override
     @Transactional(isolation =Isolation.SERIALIZABLE) // 防止幻读
-    public Result transfer(Integer fromAccountId, Integer toAccountId, Integer amount){
+    public Result<TransferFlow> transfer(Integer fromAccountId, Integer toAccountId, Integer amount){
 
-         Result ret = new Result();
+         Result<TransferFlow> ret = new Result<TransferFlow>();
         // 这里对参数做一些简单的判断
         if(amount <=0){
             ret.setCode(-100); // 错误码可再规范
@@ -101,8 +127,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Result creatAccount(Integer balance){
-        Result ret = new Result();
+    public Result<Account> creatAccount(Integer balance){
+        Result<Account> ret = new Result<Account>();
         Account account = new Account();
         account.setBalance(balance);
         int count = accountMapper.insert(account);

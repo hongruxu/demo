@@ -99,6 +99,9 @@ CREATE TABLE `user` (
 - 用 vue 简单的实现了调用接口的页面，便于测试接口和演示功能
 - 转账逻辑封装了一层service
 
+## 2025-10-01
+- 对封装的Result类的输出结构由Object类改为泛型，文档内容可读性更高。
+
 ## 问题解决
 1. lombok 无法正常使用，需要在pom.xml中对build部分进行设置,正确设置如下，如果通过spring boot 工具自动生成，是没有maven这一节的，也没有关于lombok的相关配置
 ```xml

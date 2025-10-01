@@ -9,11 +9,11 @@ import com.hongruxu.demo.entity.TransferFlow;
 // 账户相关的 Service
 public interface AccountService {
     
-    public Account getAccountById(Integer accountId);
+    public Result<Account> getAccountById(Integer accountId);
 
-    public List<TransferFlow> getTransferFlow(Integer accountId, TransferType type);
+    public Result<List<TransferFlow>>getTransferFlow(Integer accountId, TransferType type);
 
-    public Result transfer(Integer fromAccountId, Integer toAccountId, Integer amount);
+    public Result<TransferFlow> transfer(Integer fromAccountId, Integer toAccountId, Integer amount);
 
-    public Result creatAccount(Integer balance);
+    public Result<Account> creatAccount(Integer balance);
 }

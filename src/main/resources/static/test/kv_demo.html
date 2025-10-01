@@ -191,7 +191,6 @@
                 const currentOperation = ref('');
                 const loadingMessage = ref('');
                 const operationHistory = ref([]);
-                //const baseURL = 'http://114.132.58.71:9999/hello';
                 const wPath = window.document.location.href;
                 const baseURL = wPath.substring(0, wPath.indexOf("/test")) + '/hello'
                 
@@ -258,7 +257,8 @@
                     
                     try {
                         // 使用axios发送POST请求
-                        const response = await axios.post(`${baseURL}/${createForm.value.key}`,createForm.value.value,{"headers":{"Content-type":"application/json"}});
+                        const response = await axios.post(`${baseURL}/${createForm.value.key}`,
+                        createForm.value.value,{"headers":{"Content-type":"application/json"}});
                         
                         // 添加操作记录
                         addHistory('新增', createForm.value.key, createForm.value.value);
@@ -326,7 +326,8 @@
                     loadingMessage.value = '正在更新数据...';
                     
                     try {
-                        const response = await axios.post(`${baseURL}/${updateForm.value.key}`,updateForm.value.value,{"headers":{"Content-type":"application/json"}});
+                        const response = await axios.post(`${baseURL}/${updateForm.value.key}`,
+                        updateForm.value.value,{"headers":{"Content-type":"application/json"}});
                         // 添加操作记录
                         addHistory('更新', updateForm.value.key, updateForm.value.value,null);
                         
@@ -382,7 +383,6 @@
                         deleteData();
                     }
                 };
-                
                 
                 return {
                     loading,

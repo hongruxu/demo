@@ -33,82 +33,42 @@ public class AccountController {
 
     @Tag(name = "get account", description = "查询指定账户信息")
     @GetMapping("/account/{id}")
-    public Result getAccount(@PathVariable("id") Integer id) {
-        Result ret = new Result();
-        Account acc = accountService.getAccountById(id);
-        if(acc== null){
-            ret.setCode(404);
-            ret.setMessage("内容没找到");
-        }else{
-            ret.setCode(0);
-            ret.setMessage("成功");
-            ret.setContent(acc);
-        } 
-        return ret;
+    public Result<Account> getAccount(@PathVariable("id") Integer id) {
+        return  accountService.getAccountById(id);
     }
 
     // 没有考虑分页问题,也没考虑按时间筛选
     @Tag(name = "get transfer", description = "查询指定账户转出交易记录")
     @GetMapping("/transfer/from/{id}")
-    public Result getTransferFrom(@PathVariable("id") Integer id) {
-        Result ret = new Result();
-        List<TransferFlow> l =  accountService.getTransferFlow(id, TransferType.OUT);
-        if(l == null){
-            ret.setCode(404);
-            ret.setMessage("没有可显示的内容");
-        }else {
-            ret.setCode(0);
-            ret.setMessage("成功");
-            ret.setContent(l);
-        }
-        return ret;
+    public Result<List<TransferFlow>> getTransferFrom(@PathVariable("id") Integer id) {
+        return accountService.getTransferFlow(id, TransferType.OUT);
     }
 
     @Tag(name = "get transfer to ", description = "查询指定账户转入交易记录")
     @GetMapping("/transfer/to/{id}")
-    public Result getTransferTo(@PathVariable("id") Integer id) {
-        Result ret = new Result();
-        List<TransferFlow> l =  accountService.getTransferFlow(id, TransferType.IN);
-        // 简单的做下返回值封装
-        if(l == null){
-            ret.setCode(404);
-            ret.setMessage("没有可显示的内容");
-        }else {
-            ret.setCode(0);
-            ret.setMessage("成功");
-            ret.setContent(l);
-        }
-        return ret;
+    public Result<List<TransferFlow>> getTransferTo(@PathVariable("id") Integer id) {
+        return  accountService.getTransferFlow(id, TransferType.IN);
     }
 
     @Tag(name = "get transfer  ", description = "查询指定账户转入转出交易记录")
     @GetMapping("/transfer/{id}")
-    public Result getTransfer(@PathVariable("id") Integer id) {
-        Result ret = new Result();
-        List<TransferFlow> l =  accountService.getTransferFlow(id, TransferType.ALL);
-        if(l == null){
-            ret.setCode(404);
-            ret.setMessage("没有可显示的内容");
-        }else {
-            ret.setCode(0);
-            ret.setMessage("成功");
-            ret.setContent(l);
-        }
-        return ret;
+    public Result<List<TransferFlow>> getTransfer(@PathVariable("id") Integer id) {
+        return  accountService.getTransferFlow(id, TransferType.ALL);
     }
 
     // 只是简单的实现了一个A到B的转账，仅演示而已
     @Tag(name = "transfer", description = "转账操作")
     @ApiResponse(responseCode = "500", description = "交易失败")
     @PostMapping("/transfer")
-    public Result transfer(@RequestBody AccountTransfer trans) {
+    public Result<TransferFlow> transfer(@RequestBody AccountTransfer trans) {
         return accountService.transfer(trans.getFromAccount(), trans.getToAccount(),trans.getAmount());
     }
 
     @Tag(name = "create account", description = "新增一个账号")
     @PostMapping("/account")
-    public Result createAccount(@RequestBody Account account) {
+    public Result<Account> createAccount(@RequestBody Account account) {
         return accountService.creatAccount(account.getBalance());
+        
     }
     
 }
