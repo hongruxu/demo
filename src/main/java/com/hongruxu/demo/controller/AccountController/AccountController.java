@@ -31,40 +31,40 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Tag(name = "get account", description = "查询指定账户信息")
+    @Tag(name = "/account/{id}", description = "查询指定账户信息")
     @GetMapping("/account/{id}")
     public Result<Account> getAccount(@PathVariable("id") Integer id) {
         return  accountService.getAccountById(id);
     }
 
     // 没有考虑分页问题,也没考虑按时间筛选
-    @Tag(name = "get transfer", description = "查询指定账户转出交易记录")
-    @GetMapping("/transfer/from/{id}")
+    @Tag(name = "/account/transfer/from/{id}", description = "查询指定账户转出交易记录")
+    @GetMapping("/account/transfer/from/{id}")
     public Result<List<TransferFlow>> getTransferFrom(@PathVariable("id") Integer id) {
         return accountService.getTransferFlow(id, TransferType.OUT);
     }
 
-    @Tag(name = "get transfer to ", description = "查询指定账户转入交易记录")
-    @GetMapping("/transfer/to/{id}")
+    @Tag(name = "/account/transfer/to/{id}", description = "查询指定账户转入交易记录")
+    @GetMapping("/account/transfer/to/{id}")
     public Result<List<TransferFlow>> getTransferTo(@PathVariable("id") Integer id) {
         return  accountService.getTransferFlow(id, TransferType.IN);
     }
 
-    @Tag(name = "get transfer  ", description = "查询指定账户转入转出交易记录")
-    @GetMapping("/transfer/{id}")
+    @Tag(name = "/account/transfer/{id}", description = "查询指定账户转入转出交易记录")
+    @GetMapping("/account/transfer/{id}")
     public Result<List<TransferFlow>> getTransfer(@PathVariable("id") Integer id) {
         return  accountService.getTransferFlow(id, TransferType.ALL);
     }
 
     // 只是简单的实现了一个A到B的转账，仅演示而已
-    @Tag(name = "transfer", description = "转账操作")
+    @Tag(name = "/account/transfer", description = "转账操作")
     @ApiResponse(responseCode = "500", description = "交易失败")
-    @PostMapping("/transfer")
+    @PostMapping("/account/transfer")
     public Result<TransferFlow> transfer(@RequestBody AccountTransfer trans) {
         return accountService.transfer(trans.getFromAccount(), trans.getToAccount(),trans.getAmount());
     }
 
-    @Tag(name = "create account", description = "新增一个账号")
+    @Tag(name = "/account", description = "新增一个账号")
     @PostMapping("/account")
     public Result<Account> createAccount(@RequestBody Account account) {
         return accountService.creatAccount(account.getBalance());

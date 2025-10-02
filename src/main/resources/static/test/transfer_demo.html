@@ -222,7 +222,7 @@
         
         const createAccountError = ref('');
         const newAccountResult = ref(null);
-        
+
         // 查询余额
         const checkBalance = async () => {
           balanceError.value = '';
@@ -281,7 +281,7 @@
           }
           try{
             // 使用axios发送P请求
-            const response = await axios.post(`${baseURL}/transfer`,`{
+            const response = await axios.post(`${baseURL}/account/transfer`,`{
                         "fromAccount": ${transferData.value.fromAccount},
                         "toAccount": ${transferData.value.toAccount},
                         "amount": ${transferData.value.amount}
@@ -318,7 +318,7 @@
             return;
           }
           
-          path = "transfer"
+          path = "account/transfer"
           // 根据类型过滤交易记录
           if (historyQuery.value.type === 'all') {
             path = `${path}/${historyQuery.value.accountId}`
