@@ -34,14 +34,14 @@
 - 运维及CI/CD维度上的演进：从最开始能在本地跑起来，到通过脚本一键部署到测试机器，再到引入promethus+grafana整合一个可观察监控平台。以及增加测试用例。方便代码自测。
   
 ## change log 
-## 2025-09-26
+### 2025-09-26
 - 通过 spring boot创建项目
 - 引入 springdoc 生成openapi文档
 - 引入 mybatis 及 mysql 组件，读取远程数据库
 - 目前未对异常做处理，只是简单跑通逻辑
 - 有一些问题待查，比如Bean的Getter/Setter方法通过注解方式在IDE内测试时没问题，但打包发布时Schema会为空。
 
-## 2025-09-27
+### 2025-09-27
 - 实现了一个简单的转账逻辑,为了验证事务，当转账金额为99是会写一半抛异常。验证数据一致性。
 - 目前没有相应的环境，写了Dockerfile还没验证，
 - 为了方便部署，写了一个脚本简单用scp部署到机器验证，出于安全考虑，脚本是交互式的，需要手工输入密码
@@ -50,21 +50,21 @@
 - 优化了Mapper注解的写法，调整了一些业务逻辑
 - 解决了通过lombok注解在发布包中无法使用的问题
 
-## 2025-09-28
+### 2025-09-28
 - 用 promethus+grafana 把服务相关信息监控起来
 - 做了一个Result类封装返回结构。
 
-## 2025-09-29
+### 2025-09-29
 - 用openapi文档生成go语言的stub,并完成一个简单的请求，示例代码见项目[openapi-client-go-demo](https://github.com/hongruxu/openapi-client-go-demo)
 
-## 2025-09-30
+### 2025-09-30
 - 用 vue 简单的实现了调用接口的页面，便于测试接口和演示功能
 - 转账逻辑封装了一层service
 
-## 2025-10-01
+### 2025-10-01
 - 对封装的Result类的输出结构由Object类改为泛型，文档内容可读性更高。
 
-## 2025-10-08
+### 2025-10-08
 - 完善测试，针对3个模块，分别做了测试用例
 - 增加测试覆盖率报告(./mvnw clean test & ./mvnw jacoco:report 后在target/site/jacoco/index.html生成报告)
 ![覆盖率示例](./coverage.jpg)
@@ -100,7 +100,7 @@ CREATE TABLE `transfer_flow` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4
 ```
 
-## user 一个普通的用户资料表，仅演示读写操作
+### user 一个普通的用户资料表，仅演示读写操作
 ```sql
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
