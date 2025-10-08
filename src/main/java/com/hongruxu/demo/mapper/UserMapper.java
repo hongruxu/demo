@@ -13,19 +13,19 @@ import java.util.List;
 
 public interface UserMapper {
 
-    @Select("SELECT * FROM user WHERE id=#{id}")
+    @Select("SELECT * FROM `user` WHERE id=#{id}")
     User getById(@Param("id") Integer id);
 
-    @Select("SELECT * FROM user")
+    @Select("SELECT * FROM `user`")
     List<User> getAll();
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("INSERT INTO user (user_name, email, age) VALUES(#{user.userName},#{user.email},#{user.age})")
+    @Insert("INSERT INTO `user` (user_name, email, age) VALUES(#{user.userName},#{user.email},#{user.age})")
     int insert(@Param("user") User user);
 
-    @Update("UPDATE user SET user_name=#{user.userName}, email=#{user.email}, age=#{user.age} WHERE id=#{user.id}")
+    @Update("UPDATE `user` SET user_name=#{user.userName}, email=#{user.email}, age=#{user.age} WHERE id=#{user.id}")
     int update(@Param("user") User user);
 
-    @Delete("DELETE FROM user WHERE id=#{id}")
+    @Delete("DELETE FROM `user` WHERE id=#{id}")
     int deleteById(@Param("id") Integer id);
 } 

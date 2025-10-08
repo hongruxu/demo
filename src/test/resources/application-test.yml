@@ -1,0 +1,36 @@
+spring:
+    application:
+        name: demo
+    # 数据库相关配置，测试采用H2进行模拟
+    datasource:
+      url: jdbc:h2:mem:mic_test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      driver-class-name: org.h2.Driver
+      username: sa
+      password: 
+    sql:
+      init:
+        data-locations: classpath:test-data.sql
+        schema-locations: classpath:test-schema.sql
+# 启动端口
+server:
+  port: 9999
+
+mybatis:
+  configuration:
+    # 表中字段名与Bean字段名转换
+    map-underscore-to-camel-case: true
+
+# openapi 相关配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    path: /index.html
+  packages-to-scan: com.hongruxu.demo.controller
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus'
