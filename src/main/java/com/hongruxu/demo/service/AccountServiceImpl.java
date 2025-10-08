@@ -101,9 +101,9 @@ public class AccountServiceImpl implements AccountService {
             return ret;
         }
 
-        // 这里逻辑应该做进一步的封装的，这里就简单示例一下了
         fromAccount.setBalance(fromAccount.getBalance()-amount);
         toAccount.setBalance(toAccount.getBalance()+amount);
+        
         TransferFlow transFlow = new TransferFlow();
         transFlow.setFromAccount(fromAccount.getAccountId());
         transFlow.setToAccount(toAccount.getAccountId());
@@ -111,6 +111,7 @@ public class AccountServiceImpl implements AccountService {
         transFlow.setToBalance(toAccount.getBalance());
         transFlow.setAmount(amount);
 
+        // 更新流水表
         transferFlowMapper.insert(transFlow);
         // 需要取一次操作时间
         transFlow = transferFlowMapper.getTransferFlowById(transFlow.getId());

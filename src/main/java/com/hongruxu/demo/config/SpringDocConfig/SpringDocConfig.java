@@ -42,7 +42,7 @@ public class SpringDocConfig {
     public GroupedOpenApi accountAPI(){
         return GroupedOpenApi.builder()
         .group("account")
-        .pathsToMatch("/account/**", "/transfer/**")
+        .pathsToMatch("/account/**")
         .build();
     }
 
