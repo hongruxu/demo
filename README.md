@@ -66,6 +66,9 @@
 
 ## 2025-10-08
 - 完善测试，针对3个模块，分别做了测试用例
+- 增加测试覆盖率报告(./mvnw clean test & ./mvnw jacoco:report 后在target/site/jacoco/index.html生成报告)
+![覆盖率示例](./coverage.jpg)
+
 
 
 ## 数据库定义

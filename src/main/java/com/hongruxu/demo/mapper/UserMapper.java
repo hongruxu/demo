@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface UserMapper {
 
+    // 使用H2数据库做测试时，user会和关键字冲突，需要增加"`"
     @Select("SELECT * FROM `user` WHERE id=#{id}")
     User getById(@Param("id") Integer id);
 
