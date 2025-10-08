@@ -1,9 +1,9 @@
 package com.hongruxu.demo;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,9 +23,7 @@ import com.hongruxu.demo.entity.AccountTransfer;
 import com.hongruxu.demo.entity.Result;
 import com.hongruxu.demo.entity.TransferFlow;
 import com.hongruxu.demo.entity.User;
-import com.hongruxu.demo.mapper.UserMapper;
-import com.hongruxu.demo.service.AccountService;
-import com.hongruxu.demo.service.TransferType;
+
 
 
 
@@ -57,6 +55,11 @@ class DemoApplicationTests {
 		// 查询一条数据
 		String getResutl = helloController.get("test_one");
 		assertEquals(getResutl, "hello world!");
+
+		// 查询全部数据
+		Map<String,String> res = helloController.getAllValue();
+		assertNotNull(res);
+		assertTrue(res.size()>= 1);
 
 		// 修改一条数据
 		String updateResutl = helloController.addOrUpdate("test_one", "hello world 2 !");
